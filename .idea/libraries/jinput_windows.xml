@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="jinput-windows">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/jinput-windows.jar/jinput-windows.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
