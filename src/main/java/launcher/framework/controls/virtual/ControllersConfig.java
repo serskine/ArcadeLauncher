@@ -24,14 +24,10 @@ public class ControllersConfig<ControllerId, ButtonId, JoystickId> implements Ke
         return pressedKeys.contains(VirtualKey.VK_ESCAPE);
     }
 
-    public final JInputListener jInputListener;
+    public final JInputListener<ControllerId, ButtonId, JoystickId> jInputListener = new JInputListener<>();
 
     public Optional<ControllerConfig<ButtonId, JoystickId>> getControllerConfig(ControllerId controllerId) {
         return Optional.ofNullable(configMap.get(controllerId));
-    }
-
-    public ControllersConfig() {
-        this.jInputListener = new JInputListener();
     }
 
     /**

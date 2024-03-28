@@ -66,12 +66,12 @@ public class Sf2ControlsConfig extends ControllersConfig<Sf2ControllerId, Sf2But
             final String[] controllers = controllerMap.keySet().toArray(new String[controllerMap.keySet().size()]);
 
             if (controllers.length>0) {
-                jInputListener.bingController(Sf2ControllerId.PLAYER_1, controllers[0]);
+                jInputListener.bindController(Sf2ControllerId.PLAYER_1, controllers[0]);
                 jInputListener.bindJoystick(Sf2JoystickId.PLAYER_JOYSTICK, Component.Identifier.Axis.X, Component.Identifier.Axis.Y);
             }
 
             if (controllers.length>1) {
-                jInputListener.bingController(Sf2ControllerId.PLAYER_2, controllers[1]);
+                jInputListener.bindController(Sf2ControllerId.PLAYER_2, controllers[1]);
                 jInputListener.bindJoystick(Sf2JoystickId.PLAYER_JOYSTICK, Component.Identifier.Axis.X, Component.Identifier.Axis.Y);
             }
         }
