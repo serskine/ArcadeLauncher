@@ -3,30 +3,20 @@ package launcher;
 import launcher.framework.util.Logger;
 import launcher.menu.MenuGame;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+import java.io.*;
 
 public class ArcadeLauncher {
-    public static final String NATIVE_LIB_FOLDER = "/lib/native/";
-    public static final String PROP_JAVA_PATH = "java.library.path";
+    public static final String PROP_LIBRARY_PATH = "net.java.games.input.librarypath";
     public static void main(final String[] args) {
 
         Logger.info(ArcadeLauncher.class.getSimpleName() + " started.");
 
-        // Load the JInput native libraries
-        loadNativeLibrary("jinput-dx8_64.dll");
-        loadNativeLibrary("jinput-raw_64.dll");
+        final String libraryPath = new File("src/main/resources/lib").getAbsolutePath();
 
+//        System.setProperty(PROP_LIBRARY_PATH, libraryPath);
 
-        //
-        // Execute the main launcher.menu game.
-        //
-
-        Logger.info(" - Loaded required libraries.");
+        System.load(libraryPath + File.separator + "jinput-dx8_64.dll");
+        System.load(libraryPath + File.separator + "jinput-raw_64.dll");
 
         final Thread gameThread = new Thread(new MenuGame());
         gameThread.start();
@@ -39,29 +29,4 @@ public class ArcadeLauncher {
 
         Logger.info(ArcadeLauncher.class.getSimpleName() + " complete.");
     }
-
-    private static void loadNativeLibrary(String libraryName) {
-        try {
-            // Get the absolute path to the native library within the resources folder
-            String nativeLibraryPath = ArcadeLauncher.class.getResource(NATIVE_LIB_FOLDER + libraryName).getPath();
-
-            // If running from a JAR, extract the library to a temporary directory
-            if (nativeLibraryPath.contains("!")) {
-                File tempDir = Files.createTempDirectory("nativeLibs").toFile();
-                InputStream is = ArcadeLauncher.class.getResourceAsStream(NATIVE_LIB_FOLDER + libraryName);
-                File tempFile = new File(tempDir, libraryName);
-                Files.copy(is, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                nativeLibraryPath = tempFile.getAbsolutePath();
-            }
-
-            // Load the native library
-            System.load(nativeLibraryPath);
-            Logger.info("Successfully loaded native library: " + libraryName);
-        } catch (IOException e) {
-            Logger.error("Failed to extract native library: " + libraryName, e);
-        } catch (UnsatisfiedLinkError e) {
-            Logger.error("Failed to load native library: " + libraryName, e);
-        }
-    }
-
 }

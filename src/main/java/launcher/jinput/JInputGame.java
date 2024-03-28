@@ -2,6 +2,7 @@ package launcher.jinput;
 
 import launcher.GameId;
 import launcher.framework.controls.jinput.JInputListener;
+import launcher.framework.controls.jinput.RawJinputListener;
 import launcher.framework.controls.virtual.ControllersConfig;
 import launcher.framework.Game;
 import launcher.framework.draw.Draw;
@@ -13,13 +14,16 @@ import net.java.games.input.Component;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static launcher.framework.util.Text.indent;
 
 public class JInputGame extends Game<String, String, String, String> {
 
     private ControllersConfig<String, String, String> controllersConfig;
-    private JInputListener<String, String, String> listener;
+    private RawJinputListener rawJinputListener = new RawJinputListener();
     public JInputGame() {
         super(GameId.JINPUT);
     }
@@ -35,7 +39,6 @@ public class JInputGame extends Game<String, String, String, String> {
     protected ControllersConfig<String, String, String> getControlsConfig() {
         if (this.controllersConfig==null) {
             this.controllersConfig = new ControllersConfig<>();
-            this.listener = new JInputListener<>(10, controllersConfig);
         }
         return controllersConfig;
     }
@@ -44,22 +47,55 @@ public class JInputGame extends Game<String, String, String, String> {
     @Override
     public void onRender(Graphics2D g) {
             final ControllerEnvironment controllerEnvironment = ControllerEnvironment.getDefaultEnvironment();
-            final String description = describe(controllerEnvironment);
+//            final String description = describe(controllerEnvironment);
+
             final Dimension screenSize = getScreenSize();
 
             g.fillRect(0, 0, screenSize.width, screenSize.height);
+
+            final Map<String, Map<Component.Identifier, Object>> allComponentValues = rawJinputListener.getComponentValues();
+            final String description = describeComponentValues(rawJinputListener.getComponentValues());
+
             Draw.renderRetroText(g, new Point(50, 50), 20, Color.RED, Color.YELLOW, description);
+    }
+
+    String describeComponentValues(Map<String, Map<Component.Identifier, Object>> allComponentValues) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("{\n");
+        final List<String> sortedControllers = allComponentValues.keySet().stream().sorted().collect(Collectors.toList());
+
+        for(String controllerName : sortedControllers) {
+            final Map<Component.Identifier, Object> valueMap = allComponentValues.get(controllerName);
+
+            final List<Component.Identifier> sortedIdentifiers = valueMap.keySet()
+                    .stream()
+                    .sorted((l, r) -> l.getName().compareTo(r.getName()))
+                    .collect(Collectors.toList());
+            for(Component.Identifier identifier : valueMap.keySet()) {
+                final String identifierName = identifier.getName();
+                final Object value = valueMap.get(identifier);
+                sb.append(" - ")
+                    .append(Objects.toString(identifierName))
+                    .append(":\t")
+                    .append(Objects.toString(value))
+                    .append('\n');
+            }
+        }
+        sb.append("}");
+        return sb.toString();
     }
 
     @Override
     protected void onTick() {
-        listener.poll();
+        getControlsConfig().jInputListener.poll();
     }
 
     @Override
     protected boolean isGameOver() {
         return false;
     }
+
+
 
     public static final String describe(ControllerEnvironment ce) {
         final List<String> lines = new ArrayList<>();

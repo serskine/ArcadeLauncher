@@ -42,7 +42,7 @@ public class MenuGame extends Game<MenuGameState, MenuControllerId, MenuButtonId
 
         final GameId selectedGameId = getGameState().getSelectedGameId();
         final String prompt = "Select game";
-        final String displayText = prompt + "\n" + selectedGameId.name;
+        final String displayText = prompt + "\n\n" + selectedGameId.name;
 
         g.fillRect(0, 0, screenSize.width, screenSize.height);
 

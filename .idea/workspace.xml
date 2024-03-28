@@ -9,7 +9,44 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="46efafbf-8151-4b26-95e9-c06963d4ee99" name="Changes" comment="" />
+    <list default="true" id="46efafbf-8151-4b26-95e9-c06963d4ee99" name="Changes" comment="First commit with code">
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/ArcadeControls.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/RawJinputListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/util/Pair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/ArcadeLauncher_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/ArcadeLauncher_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ArcadeLauncher.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ArcadeLauncher.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/jinput-2.0.9.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/ArcadeLauncher_jar/ArcadeLauncher.bat" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/ArcadeLauncher_jar/ArcadeLauncher.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/ArcadeLauncher_jar/ArcadeLauncher.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/ArcadeLauncher_jar/ArcadeLauncher.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/ArcadeLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/ArcadeLauncher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JInputListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JInputListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JoystickConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JoystickConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JoystickState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JoystickState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/sf2/Sf2ControlsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/sf2/Sf2ControlsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/state/ButtonJoystickState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/state/ButtonJoystickState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/virtual/ControllersConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/virtual/ControllersConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/jinput/JInputGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/jinput/JInputGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/menu/MenuGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/menu/MenuGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/lib/native/jinput-dx8_64.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/lib/jinput-dx8_64.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/lib/native/jinput-raw_64.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/lib/jinput-raw_64.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/ArcadeLauncher.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/ArcadeLauncher.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/debugger/DebuggerGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/debugger/DebuggerGame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/Game.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JInputListener$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JInputListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JInputListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JoystickConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JoystickConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JoystickState.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JoystickState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/machine/sf2/Sf2ControlsConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/machine/sf2/Sf2ControlsConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/state/ButtonJoystickState.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/state/ButtonJoystickState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/virtual/ControllersConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/virtual/ControllersConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/jinput/JInputGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/jinput/JInputGame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/menu/MenuGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/menu/MenuGame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/lib/native/jinput-dx8_64.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/lib/native/jinput-raw_64.dll" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,11 +55,14 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Enum" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -40,6 +80,9 @@
     </option>
   </component>
   <component name="ProjectId" id="2dogGgj60j9J7lHlawQb9XyPBJP" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -50,6 +93,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
     &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
     &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
@@ -57,14 +101,15 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;16&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/soupt/IdeaProjects/ArcadeLauncher/res/lib&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/soupt/IdeaProjects/ArcadeLauncher/out/artifacts/ArcadeLauncher_jar/ArcadeLauncher.jar&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.3264368&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -74,11 +119,11 @@
       <recent name="C:\Users\soupt\IdeaProjects\ArcadeLauncher\src\launcher\framework" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\soupt\IdeaProjects\ArcadeLauncher\src\main\resources\lib" />
+      <recent name="C:\Users\soupt\IdeaProjects\ArcadeLauncher\src\main\resources\lib\native" />
+      <recent name="C:\Users\soupt\IdeaProjects\ArcadeLauncher\lib" />
+      <recent name="C:\Users\soupt\IdeaProjects\ArcadeLauncher\src\main" />
       <recent name="C:\Users\soupt\IdeaProjects\ArcadeLauncher\src\main\java" />
-      <recent name="C:\Users\soupt\IdeaProjects\ArcadeLauncher\src\main\resources" />
-      <recent name="C:\Users\soupt\IdeaProjects\ArcadeLauncher\res\lib" />
-      <recent name="C:\Users\soupt\IdeaProjects\ArcadeLauncher\res\lib\native" />
-      <recent name="C:\Users\soupt\IdeaProjects\ArcadeLauncher\src" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="launcher.framework" />
@@ -88,7 +133,7 @@
     <configuration name="ArcadeLauncher - No arguments" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="launcher.ArcadeLauncher" />
       <module name="ArcadeLauncher" />
-      <option name="PROGRAM_PARAMETERS" value="-Dres/lib/native" />
+      <option name="VM_PARAMETERS" value="-Djava.library.path=src/main/resources/lib" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -97,7 +142,6 @@
       <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/ArcadeLauncher_jar/ArcadeLauncher.jar" />
       <option name="WORKING_DIRECTORY" value="C:\Users\soupt\IdeaProjects\ArcadeLauncher" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <module name="ArcadeLauncher" />
       <method v="2" />
     </configuration>
     <list>
@@ -106,8 +150,53 @@
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="46efafbf-8151-4b26-95e9-c06963d4ee99" name="Changes" comment="" />
+      <created>1711294853546</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1711294853546</updated>
+    </task>
+    <task id="LOCAL-00001" summary="First patch">
+      <created>1711295059129</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1711295059129</updated>
+    </task>
+    <task id="LOCAL-00002" summary="First commit with code">
+      <created>1711295102680</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1711295102680</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <option name="SHOW_PATCH_IN_EXPLORER" value="false" />
+    <MESSAGE value="First patch" />
+    <MESSAGE value="First commit with code" />
+    <option name="LAST_COMMIT_MESSAGE" value="First commit with code" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -116,11 +205,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/launcher/framework/controls/virtual/JoysticksConfig.java</url>
           <line>47</line>
           <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JInputListener.java</url>
-          <line>53</line>
-          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -1,18 +1,27 @@
 package launcher.framework.controls.virtual;
 
+import launcher.framework.controls.ArcadeControls;
 import launcher.framework.controls.jinput.JInputListener;
+import launcher.framework.controls.jinput.JoystickState;
+import launcher.framework.controls.state.ButtonJoystickState;
+import launcher.framework.controls.state.ButtonState;
 import launcher.framework.controls.state.VirtualKey;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.*;
 
-public class ControllersConfig<ControllerId, ButtonId, JoystickId> implements KeyListener {
+public class ControllersConfig<ControllerId, ButtonId, JoystickId> implements KeyListener, ArcadeControls<ControllerId, ButtonId, JoystickId> {
 
     private final Set<VirtualKey> pressedKeys = new HashSet<>();
     private Map<ControllerId, ControllerConfig<ButtonId, JoystickId>> configMap = new HashMap<>();
     public Set<ControllerId> getBoundControllers() {
         return configMap.keySet();
+    }
+
+    @Override
+    public boolean isQuit() {
+        return pressedKeys.contains(VirtualKey.VK_ESCAPE);
     }
 
     public final JInputListener jInputListener;
@@ -22,10 +31,7 @@ public class ControllersConfig<ControllerId, ButtonId, JoystickId> implements Ke
     }
 
     public ControllersConfig() {
-        this(10);   // Set default polling time.
-    }
-    public ControllersConfig(final long pollMs) {
-        this.jInputListener = new JInputListener(pollMs, this);
+        this.jInputListener = new JInputListener();
     }
 
     /**
@@ -81,4 +87,25 @@ public class ControllersConfig<ControllerId, ButtonId, JoystickId> implements Ke
         return pressedKeys.contains(virtualKey);
     }
 
+    @Override
+    public ButtonState getButtonState(ControllerId controllerId, ButtonId buttonId) {
+        final  ControllerConfig<ButtonId, JoystickId> controllerConfig = configMap.get(controllerId);
+        if (controllerConfig==null) {
+            return ButtonState.ERROR;
+        } else {
+            return controllerConfig.buttonsConfig.getButtonState(buttonId);
+        }
+
+    }
+
+    @Override
+    public JoystickState getJoystickState(ControllerId controllerId, JoystickId joystickId) {
+        final  ControllerConfig<ButtonId, JoystickId> controllerConfig = configMap.get(controllerId);
+        if (controllerConfig==null) {
+            return JoystickState.ERROR;
+        } else {
+            final ButtonJoystickState buttonJoystickState = controllerConfig.joysticksConfig.getJoystickState(joystickId);
+            return buttonJoystickState.joystickState;
+        }
+    }
 }

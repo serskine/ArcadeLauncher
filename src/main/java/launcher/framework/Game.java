@@ -1,11 +1,13 @@
 package launcher.framework;
 
 import launcher.GameId;
+import launcher.framework.controls.ArcadeControls;
 import launcher.framework.controls.state.VirtualKey;
 import launcher.framework.controls.virtual.ControllersConfig;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 
 public abstract class Game<GameState, ControllerId, ButtonId, JoystickId> implements Runnable {
 
@@ -33,7 +35,7 @@ public abstract class Game<GameState, ControllerId, ButtonId, JoystickId> implem
 
     protected abstract GameState createInitialGameState();
 
-    protected abstract ControllersConfig<ControllerId, ButtonId, JoystickId> getControlsConfig();
+    protected abstract ArcadeControls<ControllerId, ButtonId, JoystickId> getControlsConfig();
 
     private void onStart() {
         frame = new JFrame(gameId.name);
@@ -53,12 +55,14 @@ public abstract class Game<GameState, ControllerId, ButtonId, JoystickId> implem
 
         this.drawingPane = new DrawingPane(this);
 
-        final ControllersConfig<ControllerId, ButtonId, JoystickId> controlsConfig = getControlsConfig();
+        final ArcadeControls<ControllerId, ButtonId, JoystickId> controlsConfig = getControlsConfig();
 
         frame.add(drawingPane);
         frame.setVisible(true);
 
-        frame.addKeyListener(controlsConfig);   // May no longer be needed now that I am using JInput
+        if (controlsConfig instanceof KeyListener) {
+            frame.addKeyListener((KeyListener) controlsConfig);
+        }
         frame.setFocusable(true);
 
         this.gameState = createInitialGameState();
@@ -85,8 +89,8 @@ public abstract class Game<GameState, ControllerId, ButtonId, JoystickId> implem
 
     protected abstract void onTick();
 
-    private final boolean isQuit() {
-        return getControlsConfig().isKeyPressed(VirtualKey.VK_ESCAPE);
+    private boolean isQuit() {
+        return getControlsConfig().isQuit();
     }
 
     protected abstract boolean isGameOver();

@@ -4,8 +4,11 @@ import launcher.framework.controls.state.VirtualKey;
 import launcher.framework.controls.virtual.ControllersConfig;
 import launcher.framework.controls.virtual.ControllerConfig;
 import launcher.framework.util.Logger;
+import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
+
+import java.util.Map;
 
 public class Sf2ControlsConfig extends ControllersConfig<Sf2ControllerId, Sf2ButtonId, Sf2JoystickId> {
 
@@ -59,14 +62,18 @@ public class Sf2ControlsConfig extends ControllersConfig<Sf2ControllerId, Sf2But
         if (env.getControllers().length<1) {
             Logger.warning("No controllers detected in the environment - no bindings performed.");
         } else {
-            Controller player1 = env.getControllers()[0];
-            Controller player2 = env.getControllers()[1];
+            final Map<String, Controller> controllerMap = jInputListener.getControllers();
+            final String[] controllers = controllerMap.keySet().toArray(new String[controllerMap.keySet().size()]);
 
-            jInputListener.bindController(player1.getName(), Sf2ControllerId.PLAYER_1);
-            jInputListener.bindController(player2.getName(), Sf2ControllerId.PLAYER_2);
+            if (controllers.length>0) {
+                jInputListener.bingController(Sf2ControllerId.PLAYER_1, controllers[0]);
+                jInputListener.bindJoystick(Sf2JoystickId.PLAYER_JOYSTICK, Component.Identifier.Axis.X, Component.Identifier.Axis.Y);
+            }
 
-            jInputListener.bindControllerStick(player1.getName(), Sf2JoystickId.PLAYER_JOYSTICK);
-            jInputListener.bindControllerStick(player2.getName(), Sf2JoystickId.PLAYER_JOYSTICK);
+            if (controllers.length>1) {
+                jInputListener.bingController(Sf2ControllerId.PLAYER_2, controllers[1]);
+                jInputListener.bindJoystick(Sf2JoystickId.PLAYER_JOYSTICK, Component.Identifier.Axis.X, Component.Identifier.Axis.Y);
+            }
         }
     }
 

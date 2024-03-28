@@ -1,5 +1,7 @@
 package launcher.framework.controls.state;
 
+import launcher.framework.controls.jinput.JoystickState;
+
 import static launcher.framework.controls.state.ButtonState.PRESSED;
 
 public enum ButtonJoystickState {
@@ -15,10 +17,13 @@ public enum ButtonJoystickState {
     NW(AxisState.NEGATIVE, AxisState.POSITIVE);
 
     public final AxisState xAxis, yAxis;
+    public final JoystickState joystickState;
 
     private ButtonJoystickState(AxisState xAxis, AxisState yAxis) {
         this.xAxis = xAxis;
         this.yAxis = yAxis;
+
+        this.joystickState = JoystickState.create(xAxis, yAxis);
     }
 
     private static boolean isErrorState(ButtonState buttonState) {
@@ -55,4 +60,5 @@ public enum ButtonJoystickState {
             return NEUTRAL;
         }
     }
+
 }
