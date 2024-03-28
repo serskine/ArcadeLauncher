@@ -9,10 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="46efafbf-8151-4b26-95e9-c06963d4ee99" name="Changes" comment="Most recently running without errors in the ide">
+    <list default="true" id="46efafbf-8151-4b26-95e9-c06963d4ee99" name="Changes" comment="Working jar file execution.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/ArcadeLauncher_jar/ArcadeLauncher.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/ArcadeLauncher_jar/ArcadeLauncher.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/launcher/ArcadeLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/ArcadeLauncher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/launcher/ArcadeLauncher.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/ArcadeLauncher.class" afterDir="false" />
     </list>
@@ -148,7 +147,14 @@
       <option name="project" value="LOCAL" />
       <updated>1711587930938</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Working jar file execution.">
+      <created>1711591513047</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1711591513047</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -173,7 +179,8 @@
     <MESSAGE value="First patch" />
     <MESSAGE value="First commit with code" />
     <MESSAGE value="Most recently running without errors in the ide" />
-    <option name="LAST_COMMIT_MESSAGE" value="Most recently running without errors in the ide" />
+    <MESSAGE value="Working jar file execution." />
+    <option name="LAST_COMMIT_MESSAGE" value="Working jar file execution." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
