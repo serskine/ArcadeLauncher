@@ -1,23 +1,37 @@
 package launcher.debugger;
 
 import launcher.GameId;
-import launcher.framework.controls.state.ButtonJoystickState;
-import launcher.framework.controls.state.VirtualKey;
-import launcher.framework.controls.virtual.ControllersConfig;
 import launcher.framework.Game;
+import launcher.framework.controls.ArcadeControls;
+import launcher.framework.controls.GameController;
+import launcher.framework.controls.GameControllerChangeDetector;
+import launcher.framework.controls.GameControls;
+import launcher.framework.controls.jinput.JoystickConfig;
+import launcher.framework.controls.jinput.JoystickState;
+import launcher.framework.controls.jinput.RawJinputListener;
+import launcher.framework.controls.machine.sf2.*;
+import launcher.framework.controls.state.AxisState;
+import launcher.framework.controls.state.ButtonJoystickState;
 import launcher.framework.controls.state.ButtonState;
-import launcher.framework.controls.machine.sf2.Sf2ButtonId;
-import launcher.framework.controls.machine.sf2.Sf2ControllerId;
-import launcher.framework.controls.machine.sf2.Sf2ControlsConfig;
-import launcher.framework.controls.machine.sf2.Sf2JoystickId;
-import launcher.framework.controls.virtual.ControllerConfig;
-import launcher.framework.draw.Draw;
-import launcher.framework.util.Text;
+import launcher.framework.draw.widget.TextWidget;
+import launcher.framework.draw.widget.common.ConsoleWidget;
+import launcher.framework.draw.widget.common.ControllerWidget;
+import launcher.framework.draw.widget.common.MonitorWidget;
+import launcher.framework.util.Geom;
+import launcher.framework.util.Logger;
+import launcher.framework.util.VectorBuilder;
+import net.java.games.input.Component;
+import net.java.games.input.Controller;
 
 import java.awt.*;
-import java.util.Arrays;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class DebuggerGame extends Game<Void, Sf2ControllerId, Sf2ButtonId, Sf2JoystickId> {
+public class DebuggerGame extends Game {
 
 
     public static final Color COLOR_ERROR = Color.RED;
@@ -58,23 +72,66 @@ public class DebuggerGame extends Game<Void, Sf2ControllerId, Sf2ButtonId, Sf2Jo
     public static final int TEXT_HEIGHT_MONITOR = TEXT_HEIGHT_TITLE;
     public static final int TEXT_HEIGHT_BINDING = UNIT;
 
+
+    final List<ControllerWidget> pWidgets = new ArrayList<>();
+    public Sf2GameControls gameControls = new Sf2GameControls(new RawJinputListener());
+
+    final MonitorWidget monitorWidget;
+
+    final ConsoleWidget consoleWidget;
+
+    final TextWidget titleWidget;
+
+    private GameControllerChangeDetector changeDetector;
+
+
     public DebuggerGame() {
         super(GameId.DEBUGGER);
+
+        titleWidget = new TextWidget(this);
+        titleWidget.setText("Arcade Debugger");
+        titleWidget.setTextHeight(TEXT_HEIGHT_TITLE);
+        titleWidget.setFillColor(COLOR_FOREGROUND);
+        titleWidget.setLineColor(COLOR_ACCENT);
+
+        monitorWidget = new MonitorWidget(this);
+
+        consoleWidget = new ConsoleWidget(this);
+        consoleWidget.textWidget.setTextHeight(UNIT);
+        consoleWidget.setMaxLines(15);
+
+        changeDetector = new GameControllerChangeDetector();
+        changeDetector.listeners.add(new GameControllerChangeDetector.Listener() {
+            @Override
+            public void onButtonChange(String controllerName, Object buttonId, ButtonState prevState, ButtonState currentState) {
+//                logToConsole("" + buttonId + ": " + prevState + " => " + currentState);
+            }
+
+            @Override
+            public void onAxisChange(String controllerName, Object axisId, AxisState prevState, AxisState currentState) {
+//                logToConsole("" + axisId + ": " + prevState + " => " + currentState);
+            }
+
+            @Override
+            public void onJoystickChange(String controllerName, Object joystickId, JoystickState prevState, JoystickState currentState) {
+//                logToConsole("" + joystickId + ": " + prevState + " => " + currentState);
+            }
+
+            @Override
+            public void onButtonJoystickChange(String controllerName, Object joystickId, ButtonJoystickState prevState, ButtonJoystickState currentState) {
+//                logToConsole("" + joystickId + ": " + prevState + " => " + currentState);
+            }
+
+            @Override
+            public void onComponentChange(String controllerName, Component.Identifier identifier, Object prevState, Object currentState) {
+                logToConsole("" + identifier.getName() + ": " + prevState + " => " + currentState);
+            }
+        });
     }
 
-    private Sf2ControlsConfig controlsConfig;
-
     @Override
-    protected Void createInitialGameState() {
-        return null;
-    }
-
-    @Override
-    protected ControllersConfig<Sf2ControllerId, Sf2ButtonId, Sf2JoystickId> getControlsConfig() {
-        if (controlsConfig==null) {
-            this.controlsConfig = new Sf2ControlsConfig();
-        }
-        return this.controlsConfig;
+    public ArcadeControls getControls() {
+        return this.gameControls;
     }
 
     @Override
@@ -87,357 +144,111 @@ public class DebuggerGame extends Game<Void, Sf2ControllerId, Sf2ButtonId, Sf2Jo
         g.setColor(COLOR_BACKGROUND);
         g.fillRect(0, 0, width, height);
 
-        final String title = "Arcade Debugger";
-        final Dimension textSize = Draw.getTextSize(g, TEXT_HEIGHT_TITLE, title);
-        final int tX = (width-textSize.width)/2;
-        final int tY = TEXT_HEIGHT_TITLE;
+        titleWidget.onRender(g);
+        monitorWidget.onRender(g);
 
-        final Point pTitle = new Point(tX, tY);
-        Draw.renderRetroText(g, pTitle, TEXT_HEIGHT_TITLE, COLOR_ACCENT, COLOR_FOREGROUND, title);
-
-        final int controlsWidth = MONITOR_AREA_WIDTH + UNIT + CONTROLS_AREA_WIDTH;
-        final int hpad = (width - controlsWidth) / 2;
-        final int vpad = pTitle.y + textSize.height + UNIT;
-
-        final Point pMonitor = new Point(hpad, vpad);
-        final Point pControls = new Point(pMonitor.x + MONITOR_AREA_WIDTH + UNIT, pMonitor.y);
-        final Point pBindings = new Point(pMonitor.x, pControls.y + UNIT + CONTROLS_AREA_HEIGHT);
-
-        final ControllersConfig<Sf2ControllerId, Sf2ButtonId, Sf2JoystickId> controlsConfig = getControlsConfig();
-        renderMonitorState(g, pMonitor, screenSize);
-        renderControlsState(g, pControls, controlsConfig);
-        renderBindingsState(g, pBindings, controlsConfig);
-
-    }
-
-    private void renderMonitorState(Graphics2D g, Point p, Dimension screenSize) {
-        int x = p.x;
-        int y = p.y;
-        int nW = MONITOR_AREA_WIDTH;
-        int nH = MONITOR_AREA_HEIGHT;
-
-        g.setColor(COLOR_ACTIVE);
-
-        g.fillRect(x, y, nW, nH);
-
-        g.setColor(COLOR_FOREGROUND);
-        g.drawRect(x, y, nW, nH);
-
-        final String wText = "" + screenSize.width;
-        final String hText = "" + screenSize.height;
-        final String opText = "x";
+        final ArcadeControls controlsConfig = getControls();
+        final GameControls<Sf2ControllerId, Sf2ButtonId, Sf2AxisId, Sf2JoystickId> sf2GameControls = (Sf2GameControls) controlsConfig;
 
 
-        Dimension wSize = Draw.getTextSize(g, TEXT_HEIGHT_MONITOR, wText);
-        Dimension hSize = Draw.getTextSize(g, TEXT_HEIGHT_MONITOR, hText);
-        Dimension opSize = Draw.getTextSize(g, TEXT_HEIGHT_MONITOR, opText);
-
-        final int pWidthX = p.x + (MONITOR_AREA_WIDTH-wSize.width)/2;
-        final int pOpX = p.x + (MONITOR_AREA_WIDTH-opSize.width)/2;
-        final int pHeightX = p.x + (MONITOR_AREA_WIDTH-hSize.width)/2;
-
-        final int innerHeight = MONITOR_AREA_HEIGHT - wSize.height - opSize.height - hSize.height - TEXT_HEIGHT_MONITOR - TEXT_HEIGHT_MONITOR;
-        final int pWidthY = p.y + (MONITOR_AREA_HEIGHT - innerHeight) / 2;
-        final int pOpY = pWidthY + wSize.height + TEXT_HEIGHT_MONITOR;
-        final int pHeightY = pOpY + opSize.height + TEXT_HEIGHT_MONITOR;
-
-        final Point pWidth = new Point(pWidthX, pWidthY);
-        final Point pOp = new Point(pOpX, pOpY);
-        final Point pHeight = new Point(pHeightX, pHeightY);
-
-        Draw.renderRetroText(g, pWidth, TEXT_HEIGHT_MONITOR, COLOR_ACCENT, COLOR_FOREGROUND, wText);
-        Draw.renderRetroText(g, pOp, TEXT_HEIGHT_MONITOR, COLOR_ACCENT, COLOR_FOREGROUND, opText);
-        Draw.renderRetroText(g, pHeight, TEXT_HEIGHT_MONITOR, COLOR_ACCENT, COLOR_FOREGROUND, hText);
-
-    }
-
-    private void renderControlsState(Graphics2D g, Point p, ControllersConfig<Sf2ControllerId, Sf2ButtonId, Sf2JoystickId> controllersConfig) {
-        final Point p1 = new Point(p.x, p.y);
-        final Point p2 = new Point(p.x, p.y + UNIT + CONTROLLER_HEIGHT);
-
-        ControllerConfig<Sf2ButtonId, Sf2JoystickId> player1Config = controllersConfig.getControllerConfig(Sf2ControllerId.PLAYER_1).get();
-
-        renderPlayerControls(g,
-                p1,
-                player1Config.joysticksConfig.getJoystickState(Sf2JoystickId.PLAYER_JOYSTICK),
-                player1Config.buttonsConfig.getButtonState(Sf2ButtonId.PUNCH_1),
-                player1Config.buttonsConfig.getButtonState(Sf2ButtonId.PUNCH_2),
-                player1Config.buttonsConfig.getButtonState(Sf2ButtonId.PUNCH_3),
-                player1Config.buttonsConfig.getButtonState(Sf2ButtonId.KICK_1),
-                player1Config.buttonsConfig.getButtonState(Sf2ButtonId.KICK_2),
-                player1Config.buttonsConfig.getButtonState(Sf2ButtonId.KICK_3),
-                player1Config.buttonsConfig.getButtonState(Sf2ButtonId.PLAYER_START),
-                player1Config.buttonsConfig.getButtonState(Sf2ButtonId.PLAYER_COIN),
-                ButtonState.ERROR
-        );
-
-        ControllerConfig<Sf2ButtonId, Sf2JoystickId> player2Config = controllersConfig.getControllerConfig(Sf2ControllerId.PLAYER_2).get();
-
-        renderPlayerControls(g,
-                p2,
-                player2Config.joysticksConfig.getJoystickState(Sf2JoystickId.PLAYER_JOYSTICK),
-                player2Config.buttonsConfig.getButtonState(Sf2ButtonId.PUNCH_1),
-                player2Config.buttonsConfig.getButtonState(Sf2ButtonId.PUNCH_2),
-                player2Config.buttonsConfig.getButtonState(Sf2ButtonId.PUNCH_3),
-                player2Config.buttonsConfig.getButtonState(Sf2ButtonId.KICK_1),
-                player2Config.buttonsConfig.getButtonState(Sf2ButtonId.KICK_2),
-                player2Config.buttonsConfig.getButtonState(Sf2ButtonId.KICK_3),
-                player2Config.buttonsConfig.getButtonState(Sf2ButtonId.PLAYER_START),
-                player2Config.buttonsConfig.getButtonState(Sf2ButtonId.PLAYER_COIN),
-                ButtonState.ERROR
-        );
-
-        final int padFlipper = UNIT;
-
-        int flipperY = p2.y + UNIT + CONTROLLER_HEIGHT;
-
-        final Point pLeftFlipper = new Point(p.x + padFlipper, flipperY);
-        final Point pRightFlipper = new Point(p.x + CONTROLLER_WIDTH - padFlipper - FLIPPER_WIDTH, flipperY);
-
-        renderFlipper(g, pLeftFlipper, ButtonState.ERROR);
-        renderFlipper(g, pRightFlipper, ButtonState.ERROR);
-    }
-
-    public void renderPlayerControls(
-            Graphics2D g,
-            Point p,
-            ButtonJoystickState buttonJoystickState,
-            ButtonState topLeft,
-            ButtonState topMiddle,
-            ButtonState topRight,
-            ButtonState bottomLeft,
-            ButtonState bottomMiddle,
-            ButtonState bottomRight,
-            ButtonState startButton,
-            ButtonState extraLeft,
-            ButtonState extraRight
-    ) {
-        final int innerWidth = CONTROLLER_WIDTH - UNIT - UNIT;
-        final int innerHeight = CONTROLLER_HEIGHT - UNIT - UNIT;
-        final Point pInnerOrigin = new Point(p.x + UNIT, p.y + UNIT);
-        final int joyPad = Math.min(innerHeight/2 - JOYSTICK_RADIUS, innerWidth/2 - JOYSTICK_RADIUS);
-        final Point pJoy = new Point(pInnerOrigin.x + joyPad, pInnerOrigin.y + joyPad);
-
-        g.setColor(COLOR_BACKGROUND);
-        g.fillRect(p.x, p.y, CONTROLLER_WIDTH, CONTROLLER_HEIGHT);
-
-        g.setColor(COLOR_FOREGROUND);
-        g.drawRect(p.x, p.y, CONTROLLER_WIDTH, CONTROLLER_HEIGHT);
-
-        final Point pStartButton = new Point(pInnerOrigin.x + JOYSTICK_DIAM + UNIT, pInnerOrigin.y + JOYSTICK_RADIUS - BUTTON_RADIUS);
-        final Point pExtraLeft = new Point(pStartButton.x + COIN_SLOT_WIDTH + UNIT, pStartButton.y);
-        final Point pExtraRight = new Point(pExtraLeft.x + BUTTON_DIAM + UNIT, pExtraLeft.y);
-
-        final Point pTopLeftButton = new Point(pExtraRight.x + BUTTON_DIAM + UNIT, pInnerOrigin.y);
-        final Point pTopMiddleButton = new Point(pTopLeftButton.x + BUTTON_DIAM + UNIT, pTopLeftButton.y);
-        final Point pTopRightButton = new Point(pTopMiddleButton.x + BUTTON_DIAM + UNIT, pTopMiddleButton.y);
-
-        final Point pBottomLeftButton = new Point(pTopLeftButton.x + UNIT, pTopLeftButton.y + BUTTON_DIAM + UNIT);
-        final Point pBottomMiddleButton = new Point(pBottomLeftButton.x + BUTTON_DIAM + UNIT, pBottomLeftButton.y);
-        final Point pBottomRightButton = new Point(pBottomMiddleButton.x + BUTTON_DIAM + UNIT, pBottomMiddleButton.y);
-
-        renderJoystick(g, pJoy, buttonJoystickState);
-
-        renderCoinSlot(g, pStartButton, startButton);
-
-        renderButton(g, pExtraLeft, extraLeft);
-        renderButton(g, pExtraRight, extraRight);
-
-        renderButton(g, pTopLeftButton, topLeft);
-        renderButton(g, pTopMiddleButton, topMiddle);
-        renderButton(g, pTopRightButton, topRight);
-        renderButton(g, pBottomLeftButton, bottomLeft);
-        renderButton(g, pBottomMiddleButton, bottomMiddle);
-        renderButton(g, pBottomRightButton, bottomRight);
-
-    }
-
-    private void renderButton(Graphics2D g, Point p, ButtonState buttonState) {
-        g.setColor(buttonColor(buttonState));
-        g.fillOval(p.x, p.y, BUTTON_DIAM, BUTTON_DIAM);
-
-        g.setColor(COLOR_BACKGROUND);
-        g.drawOval(p.x, p.y, BUTTON_DIAM, BUTTON_DIAM);
-    }
-
-    private Color buttonColor(ButtonState buttonState) {
-        switch (buttonState) {
-            case ERROR:
-                return COLOR_ERROR;
-            case RELEASED:
-                return COLOR_FOREGROUND;
-            case PRESSED:
-                return COLOR_ACTIVE;
-            default:
-                throw new IllegalStateException("Unexpected value: " + buttonState);
-        }
-    }
-
-    private void renderCoinSlot(Graphics2D g, Point p, ButtonState buttonState) {
-
-        g.setColor(buttonColor(buttonState));
-        g.fillRect(p.x, p.y, COIN_SLOT_WIDTH, COIN_SLOT_HEIGHT);
-
-        final int innerPadding = COIN_SLOT_WIDTH/4;
-        final int innerWidth = COIN_SLOT_WIDTH/6;
-        final int innerHeight = COIN_SLOT_HEIGHT - (innerPadding * 2);
-        final int innerX = p.x + COIN_SLOT_WIDTH - innerPadding - innerWidth;
-        final int innerY = p.y + innerPadding;
-
-        g.setColor(COLOR_BACKGROUND);
-        g.fillRect(innerX, innerY, innerWidth, innerHeight);
-    }
-
-    private void renderJoystick(Graphics2D g, Point p, ButtonJoystickState buttonJoystickState) {
-
-        final int innerRadius = JOYSTICK_RADIUS/4;
-        final int innerDiam = innerRadius * 2;
-        final int innerX = p.x + JOYSTICK_RADIUS - innerRadius;
-        final int innerY = p.y + JOYSTICK_RADIUS - innerRadius;
-
-
-        switch(buttonJoystickState) {
-            case ERROR:
-                g.setColor(Color.RED);
-                break;
-            case NEUTRAL:
-                g.setColor(Color.YELLOW);
-                break;
-            default:
-                g.setColor(Color.GREEN);
-                break;
+        for(ControllerWidget pWidget : pWidgets) {
+            pWidget.onRender(g);
         }
 
+        consoleWidget.onRender(g);
 
-        g.fillOval(p.x, p.y, JOYSTICK_DIAM, JOYSTICK_DIAM);
-
-        g.setColor(COLOR_BACKGROUND);
-        g.drawOval(p.x, p.y, JOYSTICK_DIAM, JOYSTICK_DIAM);
-
-
-        final int unit = JOYSTICK_RADIUS;
-        final int diag = (int) (unit * Math.sqrt(2D) / 2D);
-        final int none = 0;
-
-        final int N_START = 12;
-
-        final Point p1 = new Point(p.x + JOYSTICK_RADIUS, p.y + JOYSTICK_RADIUS);
-
-        g.setColor(COLOR_BACKGROUND);
-        g.fillOval(innerX, innerY, innerDiam, innerDiam);
-
-        final Point p2 = getJoystickEnd(p1, buttonJoystickState);
-        final Stroke prevStroke = g.getStroke();
-        final Stroke thickStroke = new BasicStroke(JOYSTICK_THICKNESS);
-        g.setStroke(thickStroke);
-
-        g.drawLine(p1.x, p1.y, p2.x, p2.y);
-
-        g.setStroke(prevStroke);
     }
-
-    Point getJoystickEnd(Point p1, ButtonJoystickState buttonJoystickState) {
-        final int unit = JOYSTICK_RADIUS;
-        final int diag = (int) (unit * Math.sqrt(2D) / 2D);
-        final int none = 0;
-
-        switch (buttonJoystickState) {
-            case ERROR:     return p1;
-            case NEUTRAL:   return p1;
-            case N:         return new Point(p1.x + none, p1.y - unit);
-            case NE:        return new Point(p1.x + diag, p1.y - diag);
-            case E:         return new Point(p1.x + unit, p1.y - none);
-            case SE:        return new Point(p1.x + diag, p1.y + diag);
-            case S:         return new Point(p1.x + none, p1.y + unit);
-            case SW:        return new Point(p1.x - diag, p1.y + diag);
-            case W:         return new Point(p1.x - unit, p1.y + none);
-            case NW:        return new Point(p1.x - diag, p1.y - diag);
-            default:        return p1;
-        }
-    }
-
-    private void renderFlipper(Graphics2D g, Point p, ButtonState leftFlipper) {
-
-        switch(leftFlipper) {
-            case RELEASED:
-                g.setColor(COLOR_FOREGROUND);
-                break;
-            case PRESSED:
-                g.setColor(COLOR_ACTIVE);
-                break;
-            case ERROR:
-                g.setColor(COLOR_ERROR);
-                break;
-        }
-        g.fillRect(p.x, p.y, FLIPPER_WIDTH, FLIPPER_HEIGHT);
-    }
-
-    private void renderBindingsState(Graphics2D g, Point p, ControllersConfig<Sf2ControllerId, Sf2ButtonId, Sf2JoystickId> controlsConfig) {
-        final int numButtons = Sf2ControllerId.values().length * Sf2ButtonId.values().length;
-        final int div = numButtons / 2;
-        final int colLeftX = p.x;
-        final int colRightX = p.x + BINDINGS_AREA_WIDTH/2;
-        final int fieldWidth = 20;
-
-        int slot = 0;
-        for(Sf2ControllerId controllerId : Sf2ControllerId.values()) {
-            for(Sf2ButtonId buttonId : Sf2ButtonId.values()) {
-                final int bindingY = p.y + ((slot >= div)
-                        ? (BINDING_HEIGHT * (slot - div))
-                        : BINDING_HEIGHT * slot
-                );
-                Point pBinding;
-                pBinding = (slot < div)
-                        ? new Point(colLeftX, bindingY)
-                        : new Point(colRightX, bindingY);
-
-                final ControllerConfig<Sf2ButtonId, Sf2JoystickId> controllerConfig = controlsConfig.getControllerConfig(controllerId).get();
-                final ButtonState buttonState = controllerConfig.buttonsConfig.getButtonState(buttonId);
-                final String buttonName = Text.fString("" + controllerConfig.buttonsConfig.getBoundKey(buttonId).get(), fieldWidth);
-
-                renderBinding(g, pBinding, buttonId, buttonName, buttonState);
-                slot++;
-            }
-        }
-    }
-    private void renderBinding(Graphics2D g, Point p, Sf2ButtonId button, String boundKey, ButtonState buttonState) {
-        final Color color = (boundKey == null || buttonState==ButtonState.ERROR)
-                ?   COLOR_ERROR
-                :   (buttonState == ButtonState.PRESSED)
-                    ?   COLOR_ACTIVE
-                    :   COLOR_FOREGROUND;
-        final int bTextWidth = Arrays.stream(Sf2ButtonId.values()).sequential().map(b -> b.toString().length()).reduce(0, (l, r) -> Math.max(l,r));
-
-        g.setColor(color);
-
-        g.drawRect(p.x, p.y, BINDING_WIDTH, BINDING_HEIGHT);
-
-        final String buttonText = button.toString();
-
-        final String codeText = boundKey;
-
-        final int pad = (BINDING_HEIGHT - TEXT_HEIGHT_BINDING) / 2;
-        final Point pButton = new Point(p.x + pad, p.y + pad);
-
-        final String outputText = Text.fString(Text.fString(buttonText, bTextWidth) + " : " + codeText, bTextWidth);
-        Draw.renderRetroText(g, pButton, TEXT_HEIGHT_BINDING, null, color, outputText);
-    }
-
-    public static String describeBoundKey(VirtualKey virtualKey) {
-        if (virtualKey == null) {
-            return "<None>";
-        }
-        return virtualKey.toString();
-    }
-
-
-
     @Override
-    protected void onTick() {
+    public void onTick() {
+        final Dimension screenSize = getScreenSize();
+        final int contentWidth = MONITOR_AREA_WIDTH + UNIT + CONTROLLER_WIDTH;
+        final int titleEdge = Geom.snap((screenSize.getWidth() - titleWidget.getTextSize().width) / 2d);
+        final int westEdge = Geom.snap((screenSize.getWidth() - contentWidth) / 2d);
+
+        monitorWidget.setMonitorSize(screenSize);
+
+        // Determine the location of all the widgets
+
+        titleWidget.setRelativeLocation(
+                new VectorBuilder()
+                        .translate(titleEdge, UNIT)
+                        .buildPoint2D()
+        );
+        Rectangle2D r = titleWidget.getRelativeTextBounds();
+
+        monitorWidget.setRelativeLocation(
+                new VectorBuilder()
+                        .translate(westEdge, r.getY())
+                        .translate(0D, r.getHeight() + UNIT)
+                        .buildPoint2D()
+        );
+
+        pWidgets.clear();
+
+        final ArcadeControls controlsConfig = getControls();
+        final GameControls<Sf2ControllerId, Sf2ButtonId, Sf2AxisId, Sf2JoystickId> sf2GameControls = (Sf2GameControls) controlsConfig;
+
+        Point2D startLocation = new VectorBuilder()
+                .translate(monitorWidget.getRelativeLocation().getX(), monitorWidget.getRelativeLocation().getY())
+                .translate(MONITOR_AREA_WIDTH + UNIT, 0D)
+                .buildPoint2D();
+
+        List<GameController<Sf2ButtonId, Sf2AxisId, Sf2JoystickId>> supportedControllers = sf2GameControls.getSupportedControllers();
+        for (int i = 0; i < supportedControllers.size(); i++) {
+            GameController<Sf2ButtonId, Sf2AxisId, Sf2JoystickId> gameController = supportedControllers.get(i);
+
+            ControllerWidget pWidget = new ControllerWidget(this);
+            pWidget.setRelativeLocation(
+                    new VectorBuilder()
+                            .translate(startLocation.getX(), startLocation.getY())
+                            .translate(0D, (UNIT + CONTROLLER_HEIGHT) * i)
+                            .buildPoint2D()
+            );
+
+            if (i < Sf2ControllerId.values().length) {
+                pWidget.setController(gameController);
+            }
+
+            pWidgets.add(pWidget);
+
+        }
+
+        consoleWidget.setRelativeLocation(new Point2D.Double(westEdge, screenSize.height - UNIT));
+        consoleWidget.setRelativeLocation(
+                new VectorBuilder()
+                        .translate(monitorWidget.getRelativeLocation())
+                        .translate(0D, MONITOR_AREA_HEIGHT + 2*UNIT)
+                        .buildPoint2D()
+        );
+
+        final int consoleHeight = (int) (screenSize.height - consoleWidget.getRelativeLocation().getY() - UNIT);
+        final int numLines = consoleHeight / UNIT;
+
+        consoleWidget.setMaxLines(numLines);
+
+        logControlChange(supportedControllers);
     }
+
+    private void logControlChange(List<GameController<Sf2ButtonId, Sf2AxisId, Sf2JoystickId>> supportedControllers) {
+        if (supportedControllers.isEmpty()) {
+            logToConsole("No supported controllers");
+        } else {
+            final GameController<Sf2ButtonId, Sf2AxisId, Sf2JoystickId> controller0 = supportedControllers.get(0);
+
+            changeDetector.update(controller0);
+        }
+    }
+
 
     @Override
     protected boolean isGameOver() {
         return false;
+    }
+
+    private void logToConsole(final String text) {
+        if (consoleWidget!=null) {
+            consoleWidget.append(text);
+            Logger.info(text);
+        }
     }
 }

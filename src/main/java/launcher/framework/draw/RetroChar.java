@@ -378,18 +378,18 @@ public enum RetroChar {
             "  x  "
     }),
     OPEN_BRACE('{', new String[] {
-            " xx  ",
-            "x    ",
+            "  xx ",
             " x   ",
-            "x    ",
-            " xx  "
+            "  x  ",
+            " x   ",
+            "  xx "
     }),
     CLOSE_BRACE('}', new String[] {
-            "  xx ",
-            "    x",
+            " xx  ",
             "   x ",
-            "    x",
-            "  xx "
+            "  x  ",
+            "   x ",
+            " xx  "
     }),
     OPEN_SQUARE_BRACE('[', new String[] {
             "xxx  ",

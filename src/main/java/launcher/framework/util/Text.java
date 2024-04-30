@@ -3,9 +3,8 @@ package launcher.framework.util;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -39,9 +38,6 @@ public class Text {
     public static <T> String describeList(List<T> items) { return describeList(items, true);   }
     public static <T> String describeList(List<T> items, boolean isOneLine) {
         StringBuilder sb = new StringBuilder();
-        if (!isOneLine) {
-            sb.append("\n");
-        }
         for(int i=0; i<items.size(); i++) {
             if (i>0) {
                 sb.append(",");
@@ -53,9 +49,6 @@ public class Text {
             }
 
             sb.append(items.get(i));
-        }
-        if (!isOneLine) {
-            sb.append("\n");
         }
         final String content = (isOneLine) ? sb.toString() : indent(sb.toString());
         if (isOneLine) {
@@ -124,5 +117,29 @@ public class Text {
             }
         }
         return sb.toString();
+    }
+
+    public static final String asObject(final List<String> lines) {
+        final String body = describeList(lines, false);
+        final String content = indent(body);
+        return "{\n" + content + "}\n";
+    }
+
+    public static final String asObject(final Map<String, String> map) {
+        final List<String> lines = new ArrayList<>();
+
+        final List<String> sortedKeys = map.keySet().stream().sorted().collect(Collectors.toList());
+
+        for(String key : sortedKeys) {
+            final String value = map.get(key);
+            final String line = asPair(key, value);
+            lines.add(line);
+        }
+
+        return asObject(lines);
+    }
+
+    public static final String asPair(final Object key, final Object value) {
+        return "" + Objects.toString(key) + ": " + Objects.toString(value);
     }
 }

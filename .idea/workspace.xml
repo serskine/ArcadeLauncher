@@ -9,11 +9,92 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="46efafbf-8151-4b26-95e9-c06963d4ee99" name="Changes" comment="Working jar file execution.">
+    <list default="true" id="46efafbf-8151-4b26-95e9-c06963d4ee99" name="Changes" comment="Fixed typo">
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/Actor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/Sprite.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/GameController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/GameControllerChangeDetector.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/GameControls.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/dummy/DummyGameController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/dummy/DummyGameControls.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/pm/PmAxisId.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/pm/PmController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/pm/PmGameControls.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/sf2/Sf2AxisId.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/sf2/Sf2Controller.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/BoxWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/CircleListWigit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/CircleWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/DrawWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/GroupWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/ImageWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/PolygonWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/SwitchWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/TextWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/Widget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/common/ButtonWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/common/CoinSlotWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/common/ConsoleWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/common/ControllerWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/common/FlipperWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/common/JoystickWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/common/MonitorWidget.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/util/Geom.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/util/HorizontalAlignment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/util/VectorBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/util/VerticalAlignment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/test/main/framework/draw/DrawTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/test/main/framework/util/UtilTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/ArcadeLauncher_jar/ArcadeLauncher.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/ArcadeLauncher_jar/ArcadeLauncher.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/launcher/ArcadeLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/ArcadeLauncher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/debugger/DebuggerGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/debugger/DebuggerGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/DrawingPane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/DrawingPane.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/ArcadeControls.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/ArcadeControls.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JInputListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JInputListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JoystickConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JoystickConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JoystickState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/JoystickState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/RawJinputListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/jinput/RawJinputListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/dummy/DummyControlsConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/pm/PmButtonId.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/pm/PmButtonId.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/pm/PmControlsConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/sf2/Sf2ControlsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/sf2/Sf2GameControls.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/state/AxisState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/state/AxisState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/state/ButtonJoystickState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/state/ButtonJoystickState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/state/ButtonState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/state/ButtonState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/virtual/ControllersConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/controls/virtual/ControllersConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/Draw.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/Draw.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/RetroChar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/draw/RetroChar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/framework/util/Text.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/framework/util/Text.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/jinput/JInputGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/jinput/JInputGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/menu/MenuControllersConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/launcher/menu/MenuGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/launcher/menu/MenuGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/launcher/ArcadeLauncher.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/ArcadeLauncher.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/debugger/DebuggerGame$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/debugger/DebuggerGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/debugger/DebuggerGame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/DrawingPane.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/DrawingPane.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/Game.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JInputListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JInputListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JoystickConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JoystickConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JoystickState.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/jinput/JoystickState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/machine/dummy/DummyControlsConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/machine/pm/PmButtonId.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/machine/pm/PmButtonId.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/machine/pm/PmControlsConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/machine/sf2/Sf2ControlsConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/state/AxisState.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/state/AxisState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/state/ButtonJoystickState.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/state/ButtonJoystickState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/state/ButtonState.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/state/ButtonState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/controls/virtual/ControllersConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/controls/virtual/ControllersConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/draw/Draw.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/draw/Draw.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/draw/RetroChar.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/draw/RetroChar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/util/Text$Range.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/util/Text$Range.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/framework/util/Text.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/framework/util/Text.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/jinput/JInputGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/jinput/JInputGame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/menu/MenuControllersConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/menu/MenuGame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/menu/MenuGame$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/launcher/menu/MenuGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/launcher/menu/MenuGame.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,9 +104,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Enum" />
         <option value="Class" />
-        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -77,7 +158,7 @@
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.3264368&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -106,6 +187,70 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="DrawTest.getTextSize" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ArcadeLauncher" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="main.framework.draw.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="main.framework.draw" />
+      <option name="MAIN_CLASS_NAME" value="main.framework.draw.DrawTest" />
+      <option name="METHOD_NAME" value="getTextSize" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UtilTest.describeList_multiLine" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ArcadeLauncher" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="main.framework.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="main.framework.util" />
+      <option name="MAIN_CLASS_NAME" value="main.framework.util.UtilTest" />
+      <option name="METHOD_NAME" value="describeList_multiLine" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UtilTest.describeList_oneLine" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ArcadeLauncher" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="main.framework.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="main.framework.util" />
+      <option name="MAIN_CLASS_NAME" value="main.framework.util.UtilTest" />
+      <option name="METHOD_NAME" value="describeList_oneLine" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UtilTest.learning" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ArcadeLauncher" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="main.framework.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="main.framework.util" />
+      <option name="MAIN_CLASS_NAME" value="main.framework.util.UtilTest" />
+      <option name="METHOD_NAME" value="learning" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Artifact Execution" type="JarApplication">
       <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/ArcadeLauncher_jar/ArcadeLauncher.jar" />
       <option name="WORKING_DIRECTORY" value="C:\Users\soupt\IdeaProjects\ArcadeLauncher" />
@@ -115,7 +260,19 @@
     <list>
       <item itemvalue="Application.ArcadeLauncher - No arguments" />
       <item itemvalue="JAR Application.Artifact Execution" />
+      <item itemvalue="JUnit.DrawTest.getTextSize" />
+      <item itemvalue="JUnit.UtilTest.describeList_multiLine" />
+      <item itemvalue="JUnit.UtilTest.describeList_oneLine" />
+      <item itemvalue="JUnit.UtilTest.learning" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.DrawTest.getTextSize" />
+        <item itemvalue="JUnit.UtilTest.describeList_multiLine" />
+        <item itemvalue="JUnit.UtilTest.describeList_oneLine" />
+        <item itemvalue="JUnit.UtilTest.learning" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -154,7 +311,21 @@
       <option name="project" value="LOCAL" />
       <updated>1711591513047</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Working jar file execution.">
+      <created>1711655960803</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1711655960803</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Fixed typo">
+      <created>1711657376358</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1711657376358</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -180,7 +351,8 @@
     <MESSAGE value="First commit with code" />
     <MESSAGE value="Most recently running without errors in the ide" />
     <MESSAGE value="Working jar file execution." />
-    <option name="LAST_COMMIT_MESSAGE" value="Working jar file execution." />
+    <MESSAGE value="Fixed typo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed typo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -189,6 +361,16 @@
           <url>file://$PROJECT_DIR$/src/main/java/launcher/framework/controls/virtual/JoysticksConfig.java</url>
           <line>47</line>
           <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/launcher/framework/controls/machine/sf2/Sf2Controller.java</url>
+          <line>24</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/launcher/framework/draw/widget/GroupWidget.java</url>
+          <line>24</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

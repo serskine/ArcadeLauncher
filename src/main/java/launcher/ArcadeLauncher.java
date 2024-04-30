@@ -1,5 +1,6 @@
 package launcher;
 
+import launcher.debugger.DebuggerGame;
 import launcher.framework.util.Logger;
 import launcher.menu.MenuGame;
 
@@ -15,7 +16,7 @@ public class ArcadeLauncher {
         Logger.info(ArcadeLauncher.class.getSimpleName() + " started.");
 
         loadLibraries();
-        final Thread gameThread = new Thread(new MenuGame());
+        final Thread gameThread = new Thread(new DebuggerGame());
         gameThread.start();
 
         try {

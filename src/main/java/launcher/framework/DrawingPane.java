@@ -1,14 +1,15 @@
 package launcher.framework;
 
+import launcher.framework.util.Logger;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class DrawingPane extends JPanel {
 
-    private Game<?, ?, ?, ?> game;
+    private Game game;
     public DrawingPane(final Game game) {
         this.game = game;
-//        this.addKeyListener(game.getControlsConfig());
     }
 
     public DrawingPane() {
@@ -19,7 +20,11 @@ public class DrawingPane extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        game.onRender((Graphics2D) g);
+        try {
+            game.onRender((Graphics2D) g);
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
+        }
     }
 
     private int getScreenWidth() {

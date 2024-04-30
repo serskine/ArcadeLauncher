@@ -1,141 +1,158 @@
 package launcher.jinput;
 
 import launcher.GameId;
-import launcher.framework.controls.jinput.JInputListener;
-import launcher.framework.controls.jinput.RawJinputListener;
-import launcher.framework.controls.virtual.ControllersConfig;
 import launcher.framework.Game;
+import launcher.framework.controls.ArcadeControls;
+import launcher.framework.controls.jinput.JoystickState;
+import launcher.framework.controls.machine.dummy.DummyGameControls;
+import launcher.framework.controls.state.AxisState;
+import launcher.framework.controls.state.ButtonJoystickState;
 import launcher.framework.draw.Draw;
-import launcher.framework.util.Text;
-import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.Component;
+import launcher.framework.draw.widget.TextWidget;
+import launcher.framework.util.Logger;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.awt.geom.Dimension2D;
 
-import static launcher.framework.util.Text.indent;
+public class JInputGame extends Game {
 
-public class JInputGame extends Game<String, String, String, String> {
+    public static final int TEXT_SIZE = 20;
+    public static final Color COLOR_LINE = Color.RED;
+    public static final Color COLOR_FILL = Color.YELLOW;
 
-    private ControllersConfig<String, String, String> controllersConfig;
-    private RawJinputListener rawJinputListener = new RawJinputListener();
+    public static final Color COLOR_BACKGROUND = Color.BLACK;
+
+    private JInputGameState gameState = null;
+    private TextWidget envWidget;
+    private TextWidget controllerWidget;
+
+    private TextWidget componentWidget;
+            
     public JInputGame() {
         super(GameId.JINPUT);
+
+        this.envWidget = new TextWidget(this);
+        this.controllerWidget = new TextWidget(this);
+        this.componentWidget = new TextWidget(this);
+
     }
 
-    @Override
-    protected String createInitialGameState() {
-        final ControllerEnvironment controllerEnvironment = ControllerEnvironment.getDefaultEnvironment();
-
-        return describe(controllerEnvironment);
-    }
-
-    @Override
-    protected ControllersConfig<String, String, String> getControlsConfig() {
-        if (this.controllersConfig==null) {
-            this.controllersConfig = new ControllersConfig<>();
+    public JInputGameState getGameState() {
+        if (gameState == null) {
+            this.gameState = new JInputGameState(getControls().getListener().getControllerEnvironment());
         }
-        return controllersConfig;
+        return this.gameState;
+
     }
 
+    @Override
+    public ArcadeControls getControls() {
+        return new DummyGameControls();
+    }
 
     @Override
     public void onRender(Graphics2D g) {
-            final ControllerEnvironment controllerEnvironment = ControllerEnvironment.getDefaultEnvironment();
-//            final String description = describe(controllerEnvironment);
+        final Dimension screenSize = getScreenSize();
+        Draw.fillRect(g, new Rectangle(0, 0, screenSize.width, screenSize.height), COLOR_BACKGROUND);
 
-            final Dimension screenSize = getScreenSize();
-
-            g.fillRect(0, 0, screenSize.width, screenSize.height);
-
-            final Map<String, Map<Component.Identifier, Object>> allComponentValues = rawJinputListener.getComponentValues();
-            final String description = describeComponentValues(rawJinputListener.getComponentValues());
-
-            Draw.renderRetroText(g, new Point(50, 50), 20, Color.RED, Color.YELLOW, description);
+       
+        envWidget.onRender(g);
+        controllerWidget.onRender(g);
+        componentWidget.onRender(g);
     }
 
-    String describeComponentValues(Map<String, Map<Component.Identifier, Object>> allComponentValues) {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("{\n");
-        final List<String> sortedControllers = allComponentValues.keySet().stream().sorted().collect(Collectors.toList());
-
-        for(String controllerName : sortedControllers) {
-            final Map<Component.Identifier, Object> valueMap = allComponentValues.get(controllerName);
-
-            final List<Component.Identifier> sortedIdentifiers = valueMap.keySet()
-                    .stream()
-                    .sorted((l, r) -> l.getName().compareTo(r.getName()))
-                    .collect(Collectors.toList());
-            for(Component.Identifier identifier : valueMap.keySet()) {
-                final String identifierName = identifier.getName();
-                final Object value = valueMap.get(identifier);
-                sb.append(" - ")
-                    .append(Objects.toString(identifierName))
-                    .append(":\t")
-                    .append(Objects.toString(value))
-                    .append('\n');
-            }
-        }
-        sb.append("}");
-        return sb.toString();
-    }
 
     @Override
-    protected void onTick() {
-        getControlsConfig().jInputListener.poll();
+    public void onTick() {
+
+        try {
+            final JInputGameState gameState = getGameState();
+            gameState.poll();
+
+            final JoystickState joystickState = gameState.getGameJoystickState();
+            final ButtonJoystickState buttonJoystickState = joystickState.getClosestButtonState();
+
+            if (gameState.isStickToggle() == true && (buttonJoystickState == ButtonJoystickState.NEUTRAL || buttonJoystickState == ButtonJoystickState.ERROR)) {
+                gameState.setStickToggle(false);
+            } else {
+                gameState.setStickToggle(true);
+                AxisState yAxis = buttonJoystickState.yAxis;
+                AxisState xAxis = buttonJoystickState.xAxis;
+
+                switch (xAxis) {
+                    case POSITIVE:
+                        gameState.incrementController();
+                        break;
+                    case NEGATIVE:
+                        gameState.decrementController();
+                        break;
+                    case NEUTRAL:
+                        break;
+                    case ERROR:
+                        break;
+                }
+
+                switch (yAxis) {
+                    case POSITIVE:
+                        gameState.decrementComponent();
+                        break;
+                    case NEGATIVE:
+                        gameState.incrementComponent();
+                        break;
+                    case NEUTRAL:
+                        break;
+                    case ERROR:
+                        break;
+                }
+            }
+
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
+        }
+
+        final JInputGameState gameState = getGameState();
+
+        final String envDesc = gameState.getEnvironmentDescription();
+        final Dimension envSize = Draw.getTextSize(TEXT_SIZE, envDesc);
+
+        final String controllerDesc = gameState.getControllerDescription();
+        final Dimension controllerSize = Draw.getTextSize(TEXT_SIZE, controllerDesc);
+
+        final String componentDesc = gameState.getComponentDescription();
+        final Dimension2D componentSize = Draw.getTextSize(TEXT_SIZE, componentDesc);
+
+        final int x0 = TEXT_SIZE;
+        final int x1 = x0 + envSize.width + TEXT_SIZE;
+        final int x2 = x1 + controllerSize.width + TEXT_SIZE;
+
+        final int y0 = TEXT_SIZE;
+        final int y1 = TEXT_SIZE;
+        final int y2 = TEXT_SIZE;
+
+        envWidget.setText(envDesc);
+        controllerWidget.setText(controllerDesc);
+        componentWidget.setText(componentDesc);
+
+        envWidget.setRelativeLocation(new Point(x0, y0));
+        controllerWidget.setRelativeLocation(new Point(x1, y1));
+        componentWidget.setRelativeLocation(new Point(x2, y2));
+
+
+
     }
 
+    private void renderText(Graphics2D g, int x, int y, String text) {
+        Draw.renderRetroText(g, new Point(x,y), TEXT_SIZE, COLOR_LINE, COLOR_FILL, text);
+    }
+
+
+    Point getTileLocation(int tx, int ty) {
+        return new Point(tx*TEXT_SIZE, ty*TEXT_SIZE);
+    }
     @Override
     protected boolean isGameOver() {
         return false;
     }
-
-
-
-    public static final String describe(ControllerEnvironment ce) {
-        final List<String> lines = new ArrayList<>();
-        lines.add("isSupported: " + ce.isSupported());
-        lines.add("controllers: " + describeControllers(ce.getControllers()));
-
-        return indent(Text.describeList(lines, false));
-    }
-
-    public static final String describeControllers(Controller[] controllers) {
-        final List<String> lines = new ArrayList<>();
-        for(Controller controller : controllers) {
-            if (Controller.Type.GAMEPAD.equals(controller.getType())) {
-                lines.add(describeController(controller));
-            }
-
-        }
-        return Text.describeList(lines, false);
-    }
-
-    public static String describeController(Controller controller) {
-        final List<String> lines = new ArrayList<>();
-//        lines.add("name: " + controller.getName());
-        lines.add("type: " + controller.getType());
-//        lines.add("class: " + controller.getClass().getName());
-        lines.add("components: " + describeComponents(controller.getComponents()));
-        return Text.describeList(lines, false);
-    }
-
-    public static String describeComponents(Component[] components) {
-        final List<String> lines = new ArrayList<>();
-        for(Component component : components) {
-//            lines.add("name: " + component.getName());
-//            lines.add("pollData: " + component.getPollData());
-//            lines.add("deadZome: " + component.getDeadZone());
-//            lines.add("isRelative: " + component.isRelative());
-//            lines.add("isAnalog: " + component.isAnalog());
-//            lines.add("identifier: " + component.getIdentifier());
-            lines.add("" + component.getName() + " => " + component.getIdentifier().getName());
-        }
-        return Text.describeList(lines, false);
-    }
 }
+        
+        

@@ -3,28 +3,42 @@ package launcher.framework.controls.virtual;
 import launcher.framework.controls.ArcadeControls;
 import launcher.framework.controls.jinput.JInputListener;
 import launcher.framework.controls.jinput.JoystickState;
+import launcher.framework.controls.jinput.RawJinputListener;
 import launcher.framework.controls.state.ButtonJoystickState;
 import launcher.framework.controls.state.ButtonState;
 import launcher.framework.controls.state.VirtualKey;
+import net.java.games.input.Controller;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.*;
 
-public class ControllersConfig<ControllerId, ButtonId, JoystickId> implements KeyListener, ArcadeControls<ControllerId, ButtonId, JoystickId> {
+public class ControllersConfig<ControllerId, ButtonId, AxisId, JoystickId> implements KeyListener, ArcadeControls {
 
     private final Set<VirtualKey> pressedKeys = new HashSet<>();
+
+    private final RawJinputListener jinputListener = new RawJinputListener();
     private Map<ControllerId, ControllerConfig<ButtonId, JoystickId>> configMap = new HashMap<>();
     public Set<ControllerId> getBoundControllers() {
         return configMap.keySet();
     }
-
     @Override
     public boolean isQuit() {
         return pressedKeys.contains(VirtualKey.VK_ESCAPE);
     }
 
-    public final JInputListener<ControllerId, ButtonId, JoystickId> jInputListener = new JInputListener<>();
+    @Override
+    public RawJinputListener getListener() {
+        return jinputListener;
+    }
+
+    @Override
+    public void poll() {
+        jinputListener.poll();
+    }
+
+
+    public final JInputListener<ControllerId, ButtonId, AxisId, JoystickId> jInputListener = new JInputListener<>();
 
     public Optional<ControllerConfig<ButtonId, JoystickId>> getControllerConfig(ControllerId controllerId) {
         return Optional.ofNullable(configMap.get(controllerId));
@@ -83,7 +97,6 @@ public class ControllersConfig<ControllerId, ButtonId, JoystickId> implements Ke
         return pressedKeys.contains(virtualKey);
     }
 
-    @Override
     public ButtonState getButtonState(ControllerId controllerId, ButtonId buttonId) {
         final  ControllerConfig<ButtonId, JoystickId> controllerConfig = configMap.get(controllerId);
         if (controllerConfig==null) {
@@ -94,7 +107,6 @@ public class ControllersConfig<ControllerId, ButtonId, JoystickId> implements Ke
 
     }
 
-    @Override
     public JoystickState getJoystickState(ControllerId controllerId, JoystickId joystickId) {
         final  ControllerConfig<ButtonId, JoystickId> controllerConfig = configMap.get(controllerId);
         if (controllerConfig==null) {
@@ -104,4 +116,5 @@ public class ControllersConfig<ControllerId, ButtonId, JoystickId> implements Ke
             return buttonJoystickState.joystickState;
         }
     }
+
 }

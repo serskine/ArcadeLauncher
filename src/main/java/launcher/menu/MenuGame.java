@@ -3,69 +3,80 @@ package launcher.menu;
 import launcher.GameId;
 import launcher.debugger.DebuggerGame;
 import launcher.framework.Game;
+import launcher.framework.controls.ArcadeControls;
+import launcher.framework.controls.jinput.RawJinputListener;
+import launcher.framework.controls.machine.dummy.DummyGameControls;
 import launcher.framework.controls.state.AxisState;
 import launcher.framework.controls.state.ButtonJoystickState;
 import launcher.framework.controls.state.ButtonState;
-import launcher.framework.controls.virtual.ControllersConfig;
-import launcher.framework.draw.Draw;
+import launcher.framework.draw.widget.CircleListWigit;
+import launcher.framework.draw.widget.TextWidget;
 import launcher.jinput.JInputGame;
-import launcher.framework.controls.virtual.ControllerConfig;
-
+import net.java.games.input.Component;
+import net.java.games.input.Controller;
+import java.util.List;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
-public class MenuGame extends Game<MenuGameState, MenuControllerId, MenuButtonId, MenuJoystickId> {
+public class MenuGame extends Game {
 
     public static final int TEXT_SIZE = 50;
-    ControllersConfig<MenuControllerId, MenuButtonId, MenuJoystickId> controllerConfig;
+    final MenuGameState gameState = new MenuGameState();
+    public MenuGameState getGameState() {
+        return this.gameState;
+    }
+
+    public CircleListWigit circleListWigit = new CircleListWigit(this);
 
     public MenuGame() {
         super(GameId.MENU);
-    }
-
-    @Override
-    protected MenuGameState createInitialGameState() {
-        return new MenuGameState();
-    }
-
-    @Override
-    protected ControllersConfig<MenuControllerId, MenuButtonId, MenuJoystickId> getControlsConfig() {
-        if (this.controllerConfig==null) {
-            this.controllerConfig = new MenuControllersConfig();
+        for(GameId gameId : GameId.values()) {
+            if (gameId != GameId.MENU) {
+                final TextWidget textWidget = new TextWidget(circleListWigit);
+                textWidget.setText(gameId.name);
+                circleListWigit.widgetList.add(textWidget);
+            }
         }
-        return this.controllerConfig;
+        circleListWigit.setSelectedIndex(0);
+    }
+
+
+    @Override
+    public ArcadeControls getControls() {
+        return new DummyGameControls(new RawJinputListener());
     }
 
     @Override
     public void onRender(Graphics2D g) {
         final Dimension screenSize = getScreenSize();
 
-        final GameId selectedGameId = getGameState().getSelectedGameId();
-        final String prompt = "Select game";
-        final String displayText = prompt + "\n\n" + selectedGameId.name;
+        final Point2D prevPos = new Point2D.Double(TEXT_SIZE, screenSize.height/2);
 
-        g.fillRect(0, 0, screenSize.width, screenSize.height);
-
-        final Dimension displayTextSize = Draw.getTextSize(g, TEXT_SIZE, displayText);
-
-        final int x = (screenSize.width - displayTextSize.width)/2;
-        final int y = (screenSize.height - displayTextSize.height)/2;
-        final Point2D location = new Point2D.Double(x, y);
-        Draw.renderRetroText(g, location, TEXT_SIZE, Color.RED, Color.YELLOW, displayText);
     }
 
     @Override
-    protected void onTick() {
+    public void onTick() {
         final MenuGameState gameState = getGameState();
 
         if (!gameState.isCommit()) {
 
-            final ControllersConfig<MenuControllerId, MenuButtonId, MenuJoystickId> controllersConfig = getControlsConfig();
-            final ControllerConfig<MenuButtonId, MenuJoystickId> controllerConfig = controllersConfig.getControllerConfig(MenuControllerId.MAIN_CONTROLLER).get();
-            final ButtonJoystickState joystickState = controllerConfig.joysticksConfig.getJoystickState(MenuJoystickId.JOYSTICK_ID);
+            final ArcadeControls arcadeControls = getControls();
+
+            final RawJinputListener listener = arcadeControls.getListener();
+            final List<Controller> controllers = listener.getControllersWithComponents(
+                Component.Identifier.Axis.X,
+                Component.Identifier.Axis.Y,
+                Component.Identifier.Button._1,
+                Component.Identifier.Button._2
+            );
+
+
+            final Controller player1 = (controllers.size()>0) ? controllers.get(0) : null;
+
+            final ButtonJoystickState joystickState = listener.getButtonJoystickState(player1.getName(), Component.Identifier.Axis.X, Component.Identifier.Axis.Y);
             final AxisState vAxisState = joystickState.yAxis;
-            final ButtonState selectButtonState = controllerConfig.buttonsConfig.getButtonState(MenuButtonId.SELECT);
-            final ButtonState backButtonState = controllerConfig.buttonsConfig.getButtonState(MenuButtonId.BACK);
+            final ButtonState selectButtonState = listener.getButtonState(player1.getName(), Component.Identifier.Button._0);
+            final ButtonState backButtonState = listener.getButtonState(player1.getName(), Component.Identifier.Button._1);
 
             if (vAxisState == AxisState.NEUTRAL && gameState.isJoystickToggled()) {
                 gameState.setJoystickToggled(false);

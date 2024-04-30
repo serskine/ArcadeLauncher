@@ -2,6 +2,8 @@ package launcher.framework.controls.jinput;
 
 import launcher.framework.controls.state.AxisState;
 import launcher.framework.controls.state.ButtonJoystickState;
+import launcher.framework.controls.state.ButtonState;
+import net.java.games.input.Component;
 
 public class JoystickState {
 
@@ -11,6 +13,8 @@ public class JoystickState {
 
     public final double deadZonePercentage;
     public final boolean isError;
+
+    String description = null;
 
     public JoystickState(
             final boolean isError,
@@ -24,7 +28,7 @@ public class JoystickState {
         this.deadZonePercentage = deadZonePercentage;
     }
 
-    public static final JoystickState create(AxisState xAxisState, AxisState yAxisState) {
+    public static final JoystickState axisState(AxisState xAxisState, AxisState yAxisState) {
         final boolean isError = xAxisState== AxisState.ERROR || yAxisState==AxisState.ERROR;
         final float dx = (xAxisState==AxisState.POSITIVE || xAxisState==AxisState.NEGATIVE) ? 1 : 0F;
         final float dy = (yAxisState==AxisState.POSITIVE || yAxisState==AxisState.NEGATIVE) ? 1 : 0F;
@@ -32,7 +36,26 @@ public class JoystickState {
         final double vectorMag = Math.sqrt((dx*dx) + (dy*dy));
         final double deadZoneMag = 0.25;
 
-        return new JoystickState(isError, headingRadians, vectorMag, deadZoneMag);
+        final JoystickState joystickState = new JoystickState(isError, headingRadians, vectorMag, deadZoneMag);
+        joystickState.description ="create(xAxisState=" + xAxisState + ", yAxisState=" + yAxisState + ")";
+
+        return joystickState;
+    }
+
+    public static final JoystickState componentState(final Component xAxis, final Component yAxis) {
+        final boolean isError = !AxisState.isAxisComponent(xAxis) || !AxisState.isAxisComponent(yAxis);
+        if (isError) {
+            return ERROR;
+        } else {
+            final float dx = (Math.abs(xAxis.getPollData()) <= xAxis.getDeadZone()) ? 0 : xAxis.getPollData();
+            final float dy = (Math.abs(yAxis.getPollData()) <= yAxis.getDeadZone()) ? 0 : yAxis.getPollData();
+            final double headingRadians = Math.atan2(dy, dx);
+            final double vectorMag = Math.sqrt((dx * dx) + (dy * dy));
+            final double deadZoneMag = 0.25;
+
+            JoystickState joystickState = new JoystickState(isError, headingRadians, vectorMag, deadZoneMag);
+            return joystickState;
+        }
     }
 
     public ButtonJoystickState getClosestButtonState() {
@@ -81,4 +104,23 @@ public class JoystickState {
             return ButtonJoystickState.NEUTRAL;
         }
     }
+
+    @Override
+    public String toString() {
+        return (description==null)
+            ? String.format(
+                    "%s {headingRadians: %3f, magnitudePercentage: %3f, deadZonePercentage: %3f}",
+                    isError,
+                    headingRadians,
+                    magnitudePercentage,
+                    deadZonePercentage
+                )
+            :   description;
+    }
+
+    public static boolean isSimilar(JoystickState a, JoystickState b) {
+        return ButtonJoystickState.isSame(a.getClosestButtonState(), b.getClosestButtonState());
+    }
+
+
 }

@@ -2,21 +2,19 @@ package launcher.framework;
 
 import launcher.GameId;
 import launcher.framework.controls.ArcadeControls;
-import launcher.framework.controls.state.VirtualKey;
-import launcher.framework.controls.virtual.ControllersConfig;
+import launcher.framework.controls.jinput.JInputListener;
+import launcher.framework.draw.widget.Widget;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyListener;
 
-public abstract class Game<GameState, ControllerId, ButtonId, JoystickId> implements Runnable {
+public abstract class Game extends Widget implements Runnable, Sprite, Actor {
 
     public final GameId gameId;
     private JFrame frame;
     private DrawingPane drawingPane;
-
-    private GameState gameState;
-
+    
     final void pause(final long delayMs) {
         try {
             Thread.sleep(delayMs);
@@ -27,15 +25,10 @@ public abstract class Game<GameState, ControllerId, ButtonId, JoystickId> implem
 
     public Game(final GameId gameId) {
         this.gameId = gameId;
+        this.game = this;
     }
 
-    protected GameState getGameState() {
-        return this.gameState;
-    }
-
-    protected abstract GameState createInitialGameState();
-
-    protected abstract ArcadeControls<ControllerId, ButtonId, JoystickId> getControlsConfig();
+    public abstract ArcadeControls getControls();
 
     private void onStart() {
         frame = new JFrame(gameId.name);
@@ -55,7 +48,7 @@ public abstract class Game<GameState, ControllerId, ButtonId, JoystickId> implem
 
         this.drawingPane = new DrawingPane(this);
 
-        final ArcadeControls<ControllerId, ButtonId, JoystickId> controlsConfig = getControlsConfig();
+        final ArcadeControls controlsConfig = getControls();
 
         frame.add(drawingPane);
         frame.setVisible(true);
@@ -64,8 +57,6 @@ public abstract class Game<GameState, ControllerId, ButtonId, JoystickId> implem
             frame.addKeyListener((KeyListener) controlsConfig);
         }
         frame.setFocusable(true);
-
-        this.gameState = createInitialGameState();
     }
 
     @Override
@@ -87,14 +78,15 @@ public abstract class Game<GameState, ControllerId, ButtonId, JoystickId> implem
 
     public abstract void onRender(Graphics2D g);
 
-    protected abstract void onTick();
+    public abstract void onTick();
 
     private boolean isQuit() {
-        return getControlsConfig().isQuit();
+        return getControls().isQuit();
     }
 
     protected abstract boolean isGameOver();
-    protected final Dimension getScreenSize() {
+    @Override
+    public final Dimension getScreenSize() {
         return new Dimension(drawingPane.getSize());
     }
 

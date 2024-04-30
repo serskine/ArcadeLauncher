@@ -1,5 +1,6 @@
 package launcher.framework.controls.jinput;
 
+import launcher.framework.controls.ArcadeControls;
 import launcher.framework.controls.state.AxisState;
 import launcher.framework.controls.state.ButtonJoystickState;
 import launcher.framework.controls.state.ButtonState;
@@ -8,6 +9,7 @@ import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 
+import javax.naming.ldap.Control;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -163,7 +165,7 @@ public class RawJinputListener {
         }
     }
 
-    public static final Map<String, Controller> getControllers(final ControllerEnvironment controllerEnvironment) {
+    public static final Map<String, Controller> getControllersMap(final ControllerEnvironment controllerEnvironment) {
         final Map<String, Controller> controllerMap = new TreeMap<>();
         for(Controller controller : controllerEnvironment.getControllers()) {
             controllerMap.put(controller.getName(), controller);
@@ -191,57 +193,69 @@ public class RawJinputListener {
             controller.poll();
         }
     }
-    public Map<String, Map<Component.Identifier, Object>> getComponentValues() {
-        return getComponentValues((controller) -> true, (component) -> true);
-    }
 
-    public Map<String, Map<Component.Identifier, Object>> getComponentValues(
-            Predicate<Controller> controllerPredicate,
-            Predicate<Component> componentPredicate
-    ) {
-        final Map<String, Map<Component.Identifier, Object>> map = new HashMap<>();
-
-        final Map<String,Controller> filteredControllerMap = getControllers(controllerPredicate);
-        for(Controller controller : filteredControllerMap.values()) {
-            controller.poll();
-            final Map<Component.Identifier, Object> valueMap = new HashMap<>();
-            map.put(controller.getName(), valueMap);
-
-            final List<Component> filteredComponents = Arrays.stream(controller.getComponents())
-                    .filter(c -> componentPredicate.test(c))
-                    .collect(Collectors.toList());
-
-            for(Component component : filteredComponents) {
-                final Component.Identifier id = component.getIdentifier();
-                if (id instanceof Component.Identifier.Axis) {
-                    final AxisState axisState = getAxisState(component);
-                    valueMap.put(id, axisState);
-                } else if (id instanceof Component.Identifier.Button) {
-                    final ButtonState buttonState = getButtonState(component);
-                    valueMap.put(id, buttonState);
-                } else if (id instanceof Component.Identifier.Key) {
-                    final ButtonState buttonState = getButtonState(component);
-                    valueMap.put(id, buttonState);
-                } else {
-                    final String value = "Raw data: " + component.getPollData();
-                    valueMap.put(id, value);
-                }
-            }
-        }
-        return map;
-    }
-
-    public Map<String, Controller> getControllers() {
+    public List<Controller> getControllers() {
         return getControllers(c -> true);  // Get all controller ids
     }
 
-    public Map<String, Controller>  getControllers(final Predicate<Controller> controllerPredicate) {
-        final Map<String, Controller> resultMap = new HashMap<>();
-        final Map<String, Controller> allControllers = getControllers(getControllerEnvironment());
-        allControllers.entrySet().stream()
-                .filter(e -> controllerPredicate.test(e.getValue()))
-                .forEach(e -> resultMap.put(e.getKey(), e.getValue()));
-        return resultMap;
+    public List<Controller> getControllers(Predicate<Controller> controllerPredicate) {
+        return Arrays.stream(getControllerEnvironment().getControllers()).filter(controllerPredicate).collect(Collectors.toList());
+    }
+
+    public Controller getControllerOfType(final int index, Controller.Type type) {
+        final List<Controller> controllers = getControllersOfType(type);
+        if (controllers.size() > index && index>=0) {
+            return controllers.get(index);
+        } else {
+            return null;
+        }
+    }
+
+    public List<Controller> getControllersOfType(final Controller.Type type) {
+        if (type==null) {
+            return new ArrayList<>();
+        } else {
+            return Arrays.stream(getControllerEnvironment().getControllers())
+                    .filter(c -> Objects.equals(c.getType(), type))
+                    .collect(Collectors.toList());
+        }
+    }
+
+    public boolean isButtonStateOnAnyController(Component.Identifier buttonId, ButtonState expectedState) {
+        if (isButton(buttonId)) {
+            for (Controller controller : getControllers()) {
+                final Component component = controller.getComponent(buttonId);
+                if (component != null) {
+                    final ButtonState state = getButtonState(component);
+                    if (state == expectedState) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isButton(Component.Identifier id) {
+        return (id instanceof Component.Identifier.Button || id instanceof Component.Identifier.Key);
+    }
+
+    public final List<Controller> getControllersWithJoysticks() {
+        return getControllersWithComponents(
+                Component.Identifier.Axis.X,
+                Component.Identifier.Axis.Y
+        );
+    }
+
+    public final List<Controller> getControllersWithComponents(Component.Identifier... identifiers) {
+        return getControllers(c -> {
+            for(Component.Identifier identifier : identifiers) {
+                if (c.getComponent(identifier) == null) {
+                    return false;
+                }
+            }
+            return true;
+        });
     }
 
 }

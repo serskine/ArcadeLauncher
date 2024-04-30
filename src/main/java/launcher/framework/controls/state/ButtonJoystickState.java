@@ -23,7 +23,7 @@ public enum ButtonJoystickState {
         this.xAxis = xAxis;
         this.yAxis = yAxis;
 
-        this.joystickState = JoystickState.create(xAxis, yAxis);
+        this.joystickState = JoystickState.axisState(xAxis, yAxis);
     }
 
     private static boolean isErrorState(ButtonState buttonState) {
@@ -59,6 +59,10 @@ public enum ButtonJoystickState {
         } else {
             return NEUTRAL;
         }
+    }
+
+    public static boolean isSame(ButtonJoystickState a, ButtonJoystickState b) {
+        return (a==b);
     }
 
 }

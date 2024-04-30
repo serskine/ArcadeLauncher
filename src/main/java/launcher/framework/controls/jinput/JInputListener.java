@@ -7,21 +7,32 @@ import net.java.games.input.Controller;
 
 import java.util.*;
 
-public class JInputListener<ControllerId, ButtonId, JoystickId> extends RawJinputListener implements ArcadeControls<ControllerId, ButtonId, JoystickId> {
+public class JInputListener<ControllerId, ButtonId, AxisId, JoystickId> implements ArcadeControls {
+
+    public final RawJinputListener rawJinputListener;
+
+    public JInputListener() {
+        this(new RawJinputListener());
+    }
+    public JInputListener(final RawJinputListener rawJinputListener) {
+        this.rawJinputListener = rawJinputListener;
+    }
 
     protected final Map<ControllerId, String> controllerMap = new HashMap<>();
 
-    protected final Map<JoystickId, JoystickConfig> joystickConfigMap = new HashMap<>();
+    protected final Map<JoystickId, JoystickConfig<AxisId>> joystickConfigMap = new HashMap<>();
 
     protected final Map<ButtonId, Component.Identifier> buttonMap = new HashMap<>();
 
+    protected final Map<AxisId, Component.Identifier.Axis> axisMap = new HashMap<>();
 
-    public final void bingController(ControllerId controllerId, final String name) {
+
+    public final void bindController(ControllerId controllerId, final String name) {
         controllerMap.put(controllerId, name);
     }
 
-    public final void bindJoystick(JoystickId joystickId, Component.Identifier.Axis axisX, Component.Identifier.Axis axisY) {
-        final JoystickConfig joystickConfig = new JoystickConfig(axisX, axisY);
+    public final void bindJoystick(JoystickId joystickId, AxisId axisX, AxisId axisY) {
+        final JoystickConfig joystickConfig = new JoystickConfig<AxisId>(axisX, axisY);
         joystickConfigMap.put(joystickId, joystickConfig);
     }
 
@@ -43,7 +54,7 @@ public class JInputListener<ControllerId, ButtonId, JoystickId> extends RawJinpu
         if (buttonIdentifier==null) {
             return ButtonState.ERROR;
         } else {
-            return getButtonState(controllerName, buttonIdentifier);
+            return rawJinputListener.getButtonState(controllerName, buttonIdentifier);
         }
     }
 
@@ -53,28 +64,23 @@ public class JInputListener<ControllerId, ButtonId, JoystickId> extends RawJinpu
             return JoystickState.ERROR;
         }
 
-        final JoystickConfig joystickConfig = joystickConfigMap.get(joystickId);
+        final JoystickConfig<AxisId> joystickConfig = joystickConfigMap.get(joystickId);
         if (joystickConfig==null) {
             return JoystickState.ERROR;
         } else {
-            return super.getJoystickState(controllerName, joystickConfig.xAxis, joystickConfig.yAxis);
+            final Component.Identifier.Axis xAxisId = axisMap.getOrDefault(joystickConfig.xAxis, Component.Identifier.Axis.X);
+            final Component.Identifier.Axis yAxisId = axisMap.getOrDefault(joystickConfig.xAxis, Component.Identifier.Axis.Y);
+            return rawJinputListener.getJoystickState(controllerName, xAxisId, yAxisId);
         }
     }
 
     @Override
-    public Set<ControllerId> getBoundControllers() {
-        return controllerMap.keySet();
+    public RawJinputListener getListener() {
+        return this.rawJinputListener;
     }
 
     @Override
-    public boolean isQuit() {
-        for(Controller controller : super.getControllerEnvironment().getControllers()) {
-            final ButtonState escapeButtonState = super.getButtonState(controller.getName(), Component.Identifier.Key.ESCAPE);
-            if (escapeButtonState==ButtonState.PRESSED) {
-                return true;    // Stop if any controller hits the panic button. :)
-            }
-        }
-        return false;
+    public void poll() {
+        getListener().poll();
     }
-
 }

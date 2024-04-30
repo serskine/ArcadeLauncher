@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.Collection;
 
 public class Draw {
 
@@ -30,9 +31,26 @@ public class Draw {
         renderRetroText(g, p, height, null, g.getColor(), text);
     }
 
-    public static final Dimension getTextSize(Graphics2D g, final int height, final String text) {
-        final Rectangle r = renderRetroText(g, new Point(0,0), height, null, null, text);
-        return r.getSize();
+    public static final Dimension getTextSize(final int height, final String text) {
+        if (text==null) {
+            return new Dimension(0,0);
+        }
+        String[] lines = text.split("\n");
+        Dimension[] boxes = new Dimension[lines.length];
+
+        if (lines.length<1) {
+            return new Dimension(0, 0);
+        } else if (lines.length==1) {
+            return new Dimension(lines[0].length()*height, height);
+        } else {
+            int maxW = 0;
+            for (int i = 0; i < lines.length; i++) {
+                boxes[i] = getTextSize(height - 1, lines[i]);
+                maxW = Math.max(maxW, boxes[i].width);
+            }
+            int maxH = lines.length * height;
+            return new Dimension(maxW, maxH);
+        }
     }
 
     public static final Rectangle renderRetroText(
@@ -171,6 +189,18 @@ public class Draw {
         G.setColor(oldColor);
     }
 
+    public static final void fillOval(final Graphics2D G, final Rectangle2D r, Color color) {
+        Color oldColor = G.getColor();
+        G.setColor(color);
+        int rx = (int) r.getX();
+        int ry = (int) r.getY();
+        int rw = (int) r.getWidth();
+        int rh = (int) r.getHeight();
+
+        G.fillOval(rx, ry, rw, rh);
+        G.setColor(oldColor);
+    }
+
     public static final void drawRect(
         final Graphics g,
         final int x1,
@@ -193,7 +223,7 @@ public class Draw {
         }
     }
 
-    public static void drawPoly(Graphics g, Point2D.Double... p) {
+    public static void drawPoly(Graphics g, Point2D... p) {
         int[] xPoints = new int[p.length];
         int[] yPoints = new int[p.length];
 
@@ -263,4 +293,41 @@ public class Draw {
         G.setColor(oldColor);
     }
 
+    public static void renderOval(final Graphics2D G, final Rectangle2D r, Color lineColor, Color fillColor) {
+        if (fillColor!=null) {
+            fillOval(G, r, fillColor);
+        }
+        if (lineColor!=null) {
+            drawOval(G, r, lineColor);
+        }
+    }
+
+    public static void renderRectangle(final Graphics2D G, final Rectangle2D r, Color lineColor, Color fillColor) {
+        if (fillColor!=null) {
+            fillRect(G, r, fillColor);
+        }
+        if (lineColor!=null) {
+            drawRect(G, r, lineColor);
+        }
+    }
+
+    public static void renderPolygon(final Graphics2D G, Color lineColor, Color fillColor, Point2D... points) {
+        if (fillColor != null) {
+            G.setColor(fillColor);
+            fillPoly(G, points);
+        }
+
+        if (lineColor != null) {
+            G.setColor(lineColor);
+            drawPoly(G, points);
+        }
+    }
+
+    public static void renderPolygon(final Graphics2D G, Color lineColor, Color fillColor, Collection<Point2D> points) {
+        if (points!=null && points.size()>0) {
+            final Point2D[] a = new Point2D[points.size()];
+            points.toArray(a);
+            renderPolygon(G, lineColor, fillColor, a);
+        }
+    }
 }
